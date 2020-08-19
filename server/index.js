@@ -1,0 +1,13 @@
+const express = require("express");
+const app = express();
+const cors = require("cors");
+
+app.use(cors());
+app.use(express.json());// post请求传过来的参数，经过处理，在req.body中获取
+
+require("./routes/admin/index")(app);
+require("./plugins/db")(app);
+
+app.listen(3000, () => {
+    console.log("http://localhost:3000");
+});
