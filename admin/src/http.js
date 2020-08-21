@@ -2,7 +2,7 @@ import axios from "axios";
 
 // 创建一个axios实例
 const http = axios.create({
-    baseURL: "http://localhost:3000/admin/api/", //设置baseURL
+    baseURL: "http://localhost:3000/admin/api", //设置baseURL
 });
 
 // 响应拦截器

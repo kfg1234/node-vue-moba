@@ -1,9 +1,35 @@
+// 使用multer处理文件上传，并且设置上传文件目录以及格式
+function setFile() {
+    const path = require("path");
+    const multer = require("multer");
+    const sd = require("silly-datetime");
+    const mkdirp = require("mkdirp");
+    var storage = multer.diskStorage({
+        destination: async function (req, file, cb) {
+            // 1.获取当前日期并且格式化
+            let day = sd.format(new Date(), "YYYY-MM-DD");
+            // 拼接成目录
+            let dir = path.join("uploads", day);
+            // 2.生成目录
+            await mkdirp(path.resolve(__filename, `../../../${dir}`)); //mkdirp是一个异步方法
+
+            cb(null, dir);
+        },
+        filename: function (req, file, cb) {
+            // 1.获取后缀名
+            let extname = path.extname(file.originalname);
+            // 2.根据时间戳生成文件名
+            cb(null, Date.now() + extname);
+        },
+    });
+    return multer({ storage: storage });
+}
+
 module.exports = (app) => {
     const express = require("express");
     const router = express.Router({
         mergeParams: true, //保留req.params来自父路由器的值。如果父项和子项的参数名称冲突，则子项的值优先。
     });
-    // const req.Model = require("../../models/req.Model");
 
     // 创建公共的增删改查接口
     app.use(
@@ -35,7 +61,7 @@ module.exports = (app) => {
         res.send("删除成功");
     });
 
-    //查看分类列表接口         // get和post可以重名
+    //查看分类列表接口
     router.get("/", async (req, res) => {
         let queryOptions = {};
         if (req.Model.modelName === "Category") {
@@ -50,5 +76,12 @@ module.exports = (app) => {
     router.get("/:id", async (req, res) => {
         let model = await req.Model.findById(req.params.id);
         res.send(model);
+    });
+
+    // 上传文件接口
+    app.post("/admin/api/upload", setFile().single("file"), async (req, res) => {
+        let file = req.file;
+        file.url = "http://localhost:3000/" + file.path;
+        res.send(req.file);
     });
 };

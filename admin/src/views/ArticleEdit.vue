@@ -1,14 +1,14 @@
 <template>
     <div>
-        <h1>{{ id ? "编辑" : "创建" }}分类</h1>
+        <h1>{{ id ? "编辑" : "创建" }}文章</h1>
         <el-form label-width="80px" @submit.native.prevent="save">
-            <el-form-item label="上级分类">
-                <el-select v-model="model.parent" placeholder="请选择">
-                    <el-option v-for="item in parents" :key="item._id" :label="item.name" :value="item._id"> </el-option>
+            <el-form-item label="所属分类">
+                <el-select v-model="model.categories" placeholder="请选择" :multiple="true">
+                    <el-option v-for="item in categories" :key="item._id" :label="item.name" :value="item._id"> </el-option>
                 </el-select>
             </el-form-item>
-            <el-form-item label="名称">
-                <el-input v-model="model.name"></el-input>
+            <el-form-item label="标题">
+                <el-input v-model="model.title"></el-input>
             </el-form-item>
             <el-form-item>
                 <el-button type="primary" native-type="submit">保存</el-button>
@@ -27,7 +27,7 @@ export default {
     data() {
         return {
             model: {},
-            parents: [],
+            categories: [],
         };
     },
     methods: {
@@ -36,11 +36,11 @@ export default {
             let res;
             // 如果存在id，执行编辑分类接口
             if (this.id) {
-                res = await this.$http.put(`/rest/categories/${this.id}`, this.model);
+                res = await this.$http.put(`/rest/articles/${this.id}`, this.model);
             } else {
-                res = await this.$http.post("/rest/categories", this.model);
+                res = await this.$http.post("/rest/articles", this.model);
             }
-            this.$router.replace("/categories/list");
+            this.$router.replace("/articles/list");
             this.$message({
                 showClose: true,
                 message: res.data,
@@ -48,19 +48,19 @@ export default {
                 duration: 2000,
             });
         },
-        // 编辑时获取分类名字
+        // 编辑时获取
         async fetch() {
-            let result = await this.$http.get(`/rest/categories/${this.id}`);
+            let result = await this.$http.get(`/rest/articles/${this.id}`);
             this.model = result.data;
         },
-        // 获取下拉框的上级分类数据
-        async fetchParents() {
+        // 获取下拉框的分类数据
+        async fetchCategories() {
             let res = await this.$http.get("/rest/categories");
-            this.parents = res.data;
+            this.categories = res.data;
         },
     },
     created() {
-        this.fetchParents();
+        this.fetchCategories();
         // 如果是从分类列表跳转过来，id就存在，执行后面的fetch
         this.id && this.fetch();
     },
