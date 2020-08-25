@@ -10,6 +10,9 @@
             <el-form-item label="标题">
                 <el-input v-model="model.title"></el-input>
             </el-form-item>
+            <el-form-item label="内容">
+                <vue-editor v-model="model.body" useCustomImageHandler @image-added="handleImageAdded"></vue-editor>
+            </el-form-item>
             <el-form-item>
                 <el-button type="primary" native-type="submit">保存</el-button>
             </el-form-item>
@@ -18,6 +21,7 @@
 </template>
 
 <script>
+import { VueEditor } from "vue2-editor";
 export default {
     props: {
         id: {
@@ -29,6 +33,9 @@ export default {
             model: {},
             categories: [],
         };
+    },
+    components: {
+        VueEditor,
     },
     methods: {
         // 新建分类并保存
@@ -57,6 +64,15 @@ export default {
         async fetchCategories() {
             let res = await this.$http.get("/rest/categories");
             this.categories = res.data;
+        },
+        // 处理富文本编辑器中的图片上传
+        async handleImageAdded(file, Editor, cursorLocation, resetUploader) {
+            var formData = new FormData();
+            formData.append("file", file);
+            let result = await this.$http.post("/upload", formData);
+            // 富文本器中的图片地址变为存储在后台的url地址
+            Editor.insertEmbed(cursorLocation, "image", result.data.url);
+            resetUploader();
         },
     },
     created() {

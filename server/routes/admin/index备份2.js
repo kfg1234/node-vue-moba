@@ -35,11 +35,36 @@ module.exports = (app) => {
     });
 
     // token权限验证中间件
-    const authMiddleware = require("../../middleWare/auth");
-    const resourceMiddleware = require("../../middleWare/resource");
+    let authMiddleware = async (req, res, next) => {
+        let token = String(req.headers.authorization || "")
+            .split(" ")
+            .pop();
+        assert(token, 401, "请先登录");
+        let data;
+        try {
+            data = jwt.verify(token, app.get("secret"));
+        } catch (error) {
+            return res.status(401).send({
+                message: "请先登录",
+            });
+        }
+        req.user = await AdminUser.findById(data.id); //token验证通过，查出用户信息，挂载到req.user上
+        assert(req.user, 401, "请先登录");
+        await next();
+    };
 
     // 创建公共的增删改查接口
-    app.use("/admin/api/rest/:resource", authMiddleware(), resourceMiddleware(), router);
+    app.use(
+        "/admin/api/rest/:resource",
+        authMiddleware,
+        async (req, res, next) => {
+            // 获取动态的resource值
+            let modelName = require("inflection").classify(req.params.resource); //将复数形式英文转化为单数首字母大写
+            req.Model = require(`../../models/${modelName}`); //将转化后的名字挂载到req.Model，下面的接口都可以使用
+            next();
+        },
+        router
+    );
 
     // 创建分类接口
     router.post("/", async (req, res) => {
@@ -77,7 +102,7 @@ module.exports = (app) => {
     });
 
     // 上传文件接口
-    app.post("/admin/api/upload", authMiddleware(), setFile().single("file"), async (req, res) => {
+    app.post("/admin/api/upload", authMiddleware, setFile().single("file"), async (req, res) => {
         let file = req.file;
         file.url = "http://localhost:3000/" + file.path;
         res.send(req.file);
