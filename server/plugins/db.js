@@ -11,4 +11,6 @@ module.exports = (app) => {
             console.log("连接成功");
         }
     );
+
+    require("require-all")(__dirname, "/../models");//将所有model映入进来，防止报错
 };

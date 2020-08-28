@@ -8,6 +8,7 @@ app.use(express.json()); // post请求传过来的参数，经过处理，在req
 app.use("/uploads", express.static(path.resolve(__filename, "../uploads")));
 
 require("./routes/admin/index")(app);
+require("./routes/web/index")(app);
 require("./plugins/db")(app);
 
 app.listen(3000, () => {

@@ -9,5 +9,12 @@ const schema = new mongoose.Schema({
     parent: { type: mongoose.Schema.Types.ObjectId, ref: "Category" }, //和自己产生关联，可以形成无限级分类
 });
 
-// 第三参数为创建集合，或查询集合时的名字，不然mongoose会将category末尾自动添加s来命名
+schema.virtual("children", {
+    localField: "_id",
+    foreignField: "parent",
+    justOne: false,
+    ref: "Category",
+});
+
+// 第三参数为创建集合，不然mongoose会将category末尾自动添加s来命名
 module.exports = mongoose.model("Category", schema, "categories");

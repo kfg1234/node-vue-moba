@@ -1,0 +1,37 @@
+{
+  "id": "",
+  "name": "",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "4395678",
+      "name": "menu",
+      "font_class": "menu",
+      "unicode": "e623",
+      "unicode_decimal": 58915
+    },
+    {
+      "icon_id": "6806775",
+      "name": "Boxing-Helmet",
+      "font_class": "Boxing-Helmet",
+      "unicode": "eb5d",
+      "unicode_decimal": 60253
+    },
+    {
+      "icon_id": "8924412",
+      "name": "video",
+      "font_class": "video",
+      "unicode": "e612",
+      "unicode_decimal": 58898
+    },
+    {
+      "icon_id": "14507471",
+      "name": "Menu",
+      "font_class": "Menu",
+      "unicode": "e6d5",
+      "unicode_decimal": 59093
+    }
+  ]
+}

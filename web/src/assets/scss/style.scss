@@ -1,0 +1,164 @@
+// 样式重置
+@import "./variables";
+
+* {
+    box-sizing: border-box;
+    outline: none;
+}
+
+html {
+    font-size: 13px;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    line-height: 1.2rem;
+    background: #f1f1f1;
+    -webkit-font-smoothing: antialiased; //字体平滑
+}
+
+a {
+    color: #999;
+}
+
+.w-100 {
+    width: 100%;
+}
+
+.h-100 {
+    height: 100%;
+}
+
+@each $colorKey, $color in $colors {
+    .text-#{$colorKey} {
+        color: $color;
+    }
+    .bg-#{$colorKey} {
+        background-color: $color;
+    }
+}
+
+// 文本样式
+@each $var in (left, center, right) {
+    .text-#{$var} {
+        text-align: $var;
+    }
+}
+
+@each $sizeKey, $size in $font-size {
+    .fs-#{$sizeKey} {
+        font-size: $size * $base-font-size !important;
+    }
+}
+
+// 弹性盒子
+.d-flex {
+    display: flex;
+}
+
+.flex-column {
+    flex-direction: column;
+}
+
+.flex-wrap {
+    flex-wrap: wrap;
+}
+
+.flex-1 {
+    flex: 1;
+}
+.flex-grow-1 {
+    flex-grow: 1;
+}
+
+@each $key, $value in $flex-jc {
+    .jc-#{$key} {
+        justify-content: $value;
+    }
+}
+
+@each $key, $value in $flex-ai {
+    .ai-#{$key} {
+        align-items: $value;
+    }
+}
+
+@each $typeKey, $type in $spacing-types {
+    @each $sizeKey, $size in $spacing-sizes {
+        // .m-0,m-1...
+        .#{$typeKey}-#{$sizeKey} {
+            #{$type}: $size * $spacing-base-size;
+        }
+    }
+
+    @each $sizeKey, $size in $spacing-sizes {
+        // .m-x-0,m-x-1...水平方向的边距
+        .#{$typeKey}-x-#{$sizeKey} {
+            #{$type}-left: $size * $spacing-base-size;
+            #{$type}-right: $size * $spacing-base-size;
+        }
+    }
+    @each $sizeKey, $size in $spacing-sizes {
+        // .m-y-0,m-y-1...垂直方向的边距
+        .#{$typeKey}-y-#{$sizeKey} {
+            #{$type}-top: $size * $spacing-base-size;
+            #{$type}-bottom: $size * $spacing-base-size;
+        }
+    }
+
+    @each $directionKey, $direction in $spacing-directions {
+        @each $sizeKey, $size in $spacing-sizes {
+            // .m-t-0,m-t-1...
+            .#{$typeKey}-#{$directionKey}-#{$sizeKey} {
+                #{$type}-#{$direction}: $size * $spacing-base-size;
+            }
+        }
+    }
+}
+
+// 按钮
+.btn {
+    border: none;
+    border-radius: 0.1538rem;
+    font-size: map-get($font-size, "sm") * $spacing-base-size;
+    padding: 0.3rem 0.6rem;
+}
+
+// nav
+.nav {
+    display: flex;
+    .nav-item {
+        border-bottom: 3px solid transparent;
+        padding-bottom: 0.2rem;
+        &.active {
+            color: map-get($colors, "primary");
+            border-bottom-color: map-get($colors, "primary");
+        }
+    }
+    &.nav-inverse {
+        .nav-item {
+            color: map-get($colors, "white");
+            &.active {
+                border-bottom-color: map-get($colors, "white");
+            }
+        }
+    }
+}
+
+// 雪碧图
+.sprite {
+    background: url("../images/index.png") no-repeat;
+    background-size: 28.8462rem;
+    display: inline-block;
+    &.sprite-news {
+        width: 1.7692rem;
+        height: 1.5385rem;
+        background-position: 63.546% 15.517%;
+    }
+    &.sprite-arrow {
+        width: 0.7692rem;
+        height: 0.7692rem;
+        background-position: 38.577% 52.076%;
+    }
+}

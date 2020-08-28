@@ -66,7 +66,7 @@ module.exports = (app) => {
             queryOptions.populate = "parent";
         }
         // populate作用：创建Schema时，找到parent关联的数据，并替换掉parent此时的值
-        let items = await req.Model.find().setOptions(queryOptions).limit(10); //setOptions可以将后面的链式操作转化为对象的形式
+        let items = await req.Model.find().setOptions(queryOptions).limit(100); //setOptions可以将后面的链式操作转化为对象的形式
         res.send(items);
     });
 

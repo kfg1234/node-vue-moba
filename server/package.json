@@ -20,6 +20,7 @@
         "mkdirp": "^1.0.4",
         "mongoose": "^5.10.0",
         "multer": "^1.4.2",
+        "require-all": "^3.0.0",
         "silly-datetime": "^0.1.2"
     }
 }
